@@ -1,0 +1,2 @@
+# Uruchamianie:
+`./gradlew run`
