@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            minHeight="550.0" minWidth="850.0"
+            fx:controller="org.pon1645.ooprojekt.presenter.SimulationPresenter">
+    <padding>
+        <Insets top="60" right="10" bottom="60" left="10"/>
+    </padding>
+    <top>
+        <HBox alignment="CENTER">
+            <Label fx:id="message" textAlignment="CENTER" text="test message REMOVE ME"/>
+        </HBox>
+    </top>
+    <center>
+        <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER" />
+    </center>
+    <bottom>
+        <HBox alignment="CENTER">
+            <CheckBox fx:id="debug" text="Debug"/>
+        </HBox>
+    </bottom>
+</BorderPane>

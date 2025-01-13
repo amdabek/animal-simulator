@@ -51,16 +51,16 @@ public class MenuPresenter implements Initializable {
 
     public void onStartButtonClick(ActionEvent actionEvent) {
         Stage newSimulation = new Stage();
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/simulation.fxml"));
         BorderPane viewRoot = null;
         try {
             viewRoot = loader.load();
         } catch (IOException e) {
             setError(e.getMessage());
+            return;
         }
-        //SimulationPresenter presenter = loader.getController();
-        //presenter.setWorldMap(worldMap);
+        SimulationPresenter presenter = loader.getController();
+        presenter.drawMap();
         configureStage(newSimulation, viewRoot);
         newSimulation.show();
     }
