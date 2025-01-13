@@ -1,7 +1,6 @@
-package org.pon1645.ooprojekt;
+package org.pon1645.ooprojekt.presenter;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -13,7 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HelloController implements Initializable {
+public class MenuPresenter implements Initializable {
     public TextField height;
     public TextField width;
     public RadioButton equatorial;

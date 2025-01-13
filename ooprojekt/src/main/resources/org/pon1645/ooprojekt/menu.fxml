@@ -12,7 +12,7 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.Region?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.pon1645.ooprojekt.HelloController">
+      fx:controller="org.pon1645.ooprojekt.presenter.MenuPresenter">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
