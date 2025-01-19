@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.pon1645.ooprojekt.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,9 +19,7 @@ public class MenuPresenter implements Initializable {
     public RadioButton equatorial;
     public ToggleGroup plants;
     public RadioButton jungle;
-    public RadioButton random;
     public ToggleGroup mutation;
-    public RadioButton cautious;
     public TextField plantNumber;
     public TextField energyPerMeal;
     public TextField plantsPerDay;
@@ -49,6 +48,11 @@ public class MenuPresenter implements Initializable {
         message.setStyle("-fx-text-fill: red");
     }
 
+    private void setSuccess(String text) {
+        message.setText(text);
+        message.setStyle("-fx-text-fill: green");
+    }
+
     public void onStartButtonClick(ActionEvent actionEvent) {
         Stage newSimulation = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/simulation.fxml"));
@@ -60,9 +64,32 @@ public class MenuPresenter implements Initializable {
             return;
         }
         SimulationPresenter presenter = loader.getController();
+        SimulationConfig config = new SimulationConfig();
+        config.width = Integer.parseInt(width.getText());
+        config.height = Integer.parseInt(height.getText());
+        config.plantsPerDay = Integer.parseInt(plantsPerDay.getText());
+        config.reproductionEnergyFraction = Float.parseFloat(reproduceEnergy.getText());
+        config.startEnergy = Integer.parseInt(energy.getText());
+        config.mutationVariant = mutation.getSelectedToggle().getUserData().toString().equals("cautious") ? MutationVariant.LIGHT_CORRECTION : MutationVariant.FULL_RANDOM;
+        GlobeMap map = new GlobeMap(config);
+
+        map.spawnGrassAt(new Vector2d(2,2));
+
+        SimulationEngine engine = new SimulationEngine(map);
+
+        Animal a1 = new Animal(map, new Vector2d(2,2));
+        Animal a2 = new Animal(map, new Vector2d(2,2));
+        Animal a3 = new Animal(map, new Vector2d(0,3));
+
+        engine.addAnimal(a1);
+        engine.addAnimal(a2);
+        engine.addAnimal(a3);
+
+        engine.run(6);
         presenter.drawMap();
         configureStage(newSimulation, viewRoot);
         newSimulation.show();
+        setSuccess("Uruchomiono symulację");
     }
 
     @Override

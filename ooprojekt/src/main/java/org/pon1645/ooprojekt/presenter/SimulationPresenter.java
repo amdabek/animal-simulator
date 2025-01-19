@@ -1,5 +1,6 @@
 package org.pon1645.ooprojekt.presenter;
 
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -9,24 +10,28 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.image.Image;
+import org.pon1645.ooprojekt.*;
 
-public class SimulationPresenter {
+import java.util.List;
+import java.util.Objects;
+
+public class SimulationPresenter implements IObserver {
     public CheckBox debug;
     public GridPane mapGrid;
     public Label message;
 
-    //private WorldMap worldMap;
+    private GlobeMap globeMap;
 
-    //public void setWorldMap(WorldMap worldMap) {
-        //this.worldMap = worldMap;
-        //this.message.setStyle("-fx-text-fill: black");
-        //drawMap();
-   //}
+    public void setGlobeMap(GlobeMap globeMap) {
+        this.globeMap = globeMap;
+        this.message.setStyle("-fx-text-fill: black");
+        drawMap();
+   }
 
     public void drawMap() {
         clearGrid();
-        int width = getWidth();
-        int height = getHeight();
+        int width = globeMap.getWidth();
+        int height = globeMap.getHeight();
         float CELL_WIDTH = 50;
         float CELL_HEIGHT = 50;
         for (int i = 0; i <= height; i++) {
@@ -36,7 +41,6 @@ public class SimulationPresenter {
             mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_WIDTH));
         }
         for (int i = 0; i <= height; i++) {
-
             for (int j = 0; j <= width; j++) {
                 Node cell;
                 if (i == 0 && j == 0)
@@ -46,10 +50,10 @@ public class SimulationPresenter {
                 else if (j == 0)
                     cell = new Label(i+"");
                 else {
-                    //Object object = null;
-                    //WorldElement object = worldMap.objectAt(new Vector2d(j, i));
-                    cell = new ImageView(new Image(getClass().getResourceAsStream("/images/up.png")));
+                    cell = new ImageView();
                     ImageView cellImageView = (ImageView) cell;
+                    if (globeMap.hasGrassAt(new Vector2d(j, i)))
+                        cellImageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/grass.png"))));
                     cellImageView.setFitWidth(CELL_WIDTH);
                     cellImageView.setFitHeight(CELL_HEIGHT);
                 }
@@ -65,19 +69,8 @@ public class SimulationPresenter {
         mapGrid.getRowConstraints().clear();
     }
 
-    //@Override
-    //public void mapChanged(WorldMap worldMap, String message) {
-    //    Platform.runLater(() -> {
-    //        drawMap();
-    //       this.message.setText(message);
-    //    });
-    //}
-
-    private int getWidth() {
-        return 10; //worldMap.getCurrentBounds().upperRight().getX()-worldMap.getCurrentBounds().lowerLeft().getX();
-    }
-
-    private int getHeight() {
-        return  10; //worldMap.getCurrentBounds().upperRight().getY()-worldMap.getCurrentBounds().lowerLeft().getY();
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition, Object element) {
+        Platform.runLater(this::drawMap);
     }
 }
