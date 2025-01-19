@@ -2,31 +2,25 @@ package org.pon1645.ooprojekt;
 
 public class Main {
     public static void main(String[] args) {
-        // Konfiguracja
         SimulationConfig config = new SimulationConfig();
-        config.width = 6;
-        config.height = 4;
+        config.width = 10;
+        config.height = 10;
+        config.initialAnimals = 3;
+        config.initialPlants = 5;
+        config.startEnergy = 10;
+        config.plantEnergy = 4;
         config.plantsPerDay = 1;
-        config.reproductionEnergyFraction = 0.25;
-        config.startEnergy = 20;
-        //wariant mutacji
+        config.genomeLength = 6;
+        config.minMutation = 1;
+        config.maxMutation = 4;
         config.mutationVariant = MutationVariant.FULL_RANDOM;
+        config.plantGrowthVariant = PlantGrowthVariant.EQUATOR;
+        config.reproductionEnergyFraction = 0.5;
 
         GlobeMap map = new GlobeMap(config);
-
-        map.spawnGrassAt(new Vector2d(2,2));
-
         SimulationEngine engine = new SimulationEngine(map);
 
-        Animal a1 = new Animal(map, new Vector2d(2,2));
-        Animal a2 = new Animal(map, new Vector2d(2,2));
-
-        Animal a3 = new Animal(map, new Vector2d(0,3));
-
-        engine.addAnimal(a1);
-        engine.addAnimal(a2);
-        engine.addAnimal(a3);
-
-        engine.run(6);
+        engine.generateInitialPlantsAndAnimals();
+        engine.run(10);
     }
 }

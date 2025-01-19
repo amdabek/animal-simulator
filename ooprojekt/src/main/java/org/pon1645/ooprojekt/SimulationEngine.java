@@ -1,116 +1,115 @@
 package org.pon1645.ooprojekt;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SimulationEngine {
+public class SimulationEngine implements IObserver {
     private final GlobeMap map;
     private final List<Animal> animals = new ArrayList<>();
-
-    private final int moveCost = 1;                // utrata energii za 1 ruch
-    private final int minReproductionEnergy = 8;   // min energia do rozmnażania
+    private boolean running = false;
+    private final long stepDelay = 500;
 
     public SimulationEngine(GlobeMap map) {
         this.map = map;
     }
 
-    public void addAnimal(Animal animal) {
-        animals.add(animal);
+    public void generateInitialPlantsAndAnimals() {
+        for (int i = 0; i < map.getConfig().initialPlants; i++) {
+            map.spawnSinglePlantEquator();
+        }
+        for (int i = 0; i < map.getConfig().initialAnimals; i++) {
+            int x=(int)(Math.random()*map.getWidth());
+            int y=(int)(Math.random()*map.getHeight());
+            addAnimal(new Vector2d(x,y));
+        }
+    }
+
+    public void addAnimal(Vector2d pos) {
+        Animal a = new Animal(map, pos);
+        a.addObserver(this);
+        animals.add(a);
     }
 
     public void run(int days) {
-        for (int day = 0; day < days; day++) {
-            System.out.println("\n=== Dzień " + day + " ===");
-
-            // Jedzenie
-            eatGrassPhase();
-
-            // Rozmnażanie
-            reproducePhase();
-
-            // Usunięcie martwych
-            removeDeadAnimals();
-
-            // Wyświetlanie stanu
-            printAnimalsState();
-
-            // ruch
-            for (Animal animal : animals) {
-                animal.rotateAccordingToGene();
-                animal.move(MoveDirection.FORWARD);
-                animal.subtractEnergy(moveCost);
-            }
+        for(int i=0; i<days; i++){
+            doOneDay();
         }
     }
 
-    private void eatGrassPhase() {
-        Map<Vector2d, List<Animal>> groupedByPos = new HashMap<>();
-        for (Animal a : animals) {
-            groupedByPos
-                    .computeIfAbsent(a.getPosition(), k -> new ArrayList<>())
-                    .add(a);
-        }
+    public void doOneDay() {
+        rotateAll();
+        moveAll();
+        reproduceAll();
+        checkEating();
+        removeDeadAnimals();
+        map.growPlants();
+    }
 
-        for (Map.Entry<Vector2d, List<Animal>> entry : groupedByPos.entrySet()) {
-            Vector2d pos = entry.getKey();
-            if (map.hasGrassAt(pos)) {
-                // Wybór najsilniejszego do zjedzenia trway
-                List<Animal> animalsHere = entry.getValue();
-                animalsHere.sort(Comparator.comparingInt(Animal::getEnergy).reversed());
-                Animal strongest = animalsHere.get(0);
-
-                strongest.addEnergy(Grass.getEnergyValue());
-                System.out.println("  " + strongest + " zjada trawę na polu " + pos);
-
-                map.removeGrassAt(pos);
-            }
+    private void rotateAll() {
+        for(Animal a : animals){
+            a.rotateAccordingToGene();
         }
     }
 
-    private void reproducePhase() {
-        Map<Vector2d, List<Animal>> groupedByPos = new HashMap<>();
-        for (Animal a : animals) {
-            groupedByPos
-                    .computeIfAbsent(a.getPosition(), k -> new ArrayList<>())
-                    .add(a);
+    private void moveAll() {
+        for(Animal a : animals){
+            a.move(MoveDirection.FORWARD);
+            a.subtractEnergy(1);
         }
+    }
 
-        for (Map.Entry<Vector2d, List<Animal>> entry : groupedByPos.entrySet()) {
-            List<Animal> animalsHere = entry.getValue();
-            if (animalsHere.size() > 1) {
-                animalsHere.sort(Comparator.comparingInt(Animal::getEnergy).reversed());
-                // co dwie sztuki
-                for (int i = 0; i < animalsHere.size() - 1; i += 2) {
-                    Animal first = animalsHere.get(i);
-                    Animal second = animalsHere.get(i+1);
-
-                    if (first.getEnergy() >= minReproductionEnergy
-                            && second.getEnergy() >= minReproductionEnergy) {
-                        Animal child = first.reproduceWith(second);
-                        animals.add(child);
-                        System.out.println("  >>> Narodziny dziecka na polu "
-                                + child.getPosition()
-                                + " z rodziców o energii "
-                                + first.getEnergy() + " i " + second.getEnergy());
+    private void reproduceAll() {
+        List<Animal> newAnimals = new ArrayList<>();
+        for (Animal a : animals) {
+            for (Animal b : animals) {
+                if (a != b && a.getPosition().equals(b.getPosition())) {
+                    if (!a.isDead() && !b.isDead()) {
+                        if (a.getEnergy() > 0 && b.getEnergy() > 0) {
+                            Animal child = a.reproduceWith(b);
+                            child.addObserver(this);
+                            newAnimals.add(child);
+                        }
                     }
                 }
+            }
+        }
+        animals.addAll(newAnimals);
+    }
+
+    private void checkEating() {
+        for(Animal a : animals){
+            if(map.hasGrassAt(a.getPosition())){
+                a.addEnergy(map.getConfig().plantEnergy);
+                map.removeGrassAt(a.getPosition());
             }
         }
     }
 
     private void removeDeadAnimals() {
-        int before = animals.size();
         animals.removeIf(Animal::isDead);
-        int after = animals.size();
-        if (after < before) {
-            System.out.println("  >>> Usunięto " + (before - after) + " martwych zwierząt.");
+    }
+
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition, Object element) {
+        if(element instanceof Animal an) {
+            List<Animal> oldList = map.getAnimalsAt(oldPosition);
+            if(oldList != null) {
+                oldList.remove(an);
+                if(oldList.isEmpty()) {
+                    map.removeAnimal(an);
+                }
+            }
+            List<Animal> newList = map.getAnimalsAt(newPosition);
+            if(newList == null){
+                newList = new ArrayList<>();
+                map.placeAnimal(an);
+            } else {
+                newList.add(an);
+            }
         }
     }
 
-    private void printAnimalsState() {
-        for (Animal a : animals) {
-            System.out.println("  " + a + " -> pozycja: "
-                    + a.getPosition()
-                    + ", energia=" + a.getEnergy());
-        }
+    public List<Animal> getAnimals(){
+        return animals;
     }
 }
