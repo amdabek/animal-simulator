@@ -45,13 +45,13 @@
         </HBox>
         <Label text="Wariant mutacji:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
         <HBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3">
-            <RadioButton fx:id="random" text="Pełna losowość">
+            <RadioButton userData="random" text="Pełna losowość">
                 <toggleGroup>
                     <ToggleGroup fx:id="mutation"/>
                 </toggleGroup>
             </RadioButton>
             <Region HBox.hgrow="ALWAYS"/>
-            <RadioButton fx:id="cautious" text="Lekka korekta">
+            <RadioButton userData="cautious" text="Lekka korekta">
                 <toggleGroup>
                     <fx:reference source="mutation"/>
                 </toggleGroup>
