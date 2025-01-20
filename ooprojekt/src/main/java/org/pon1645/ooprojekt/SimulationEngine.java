@@ -315,7 +315,5 @@ public class SimulationEngine implements IObserver, Callable<Void> {
 
     public GlobeMap getMap() { return map; }
 
-    public int getCurrentDay() {
-        return currentDay;
-    }
+
 }
