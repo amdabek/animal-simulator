@@ -2,6 +2,7 @@ module org.pon1645.ooprojekt {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires java.prefs;
 
 
     opens org.pon1645.ooprojekt to javafx.fxml;

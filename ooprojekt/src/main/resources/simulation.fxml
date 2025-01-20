@@ -6,24 +6,66 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.VBox?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="550.0" minWidth="850.0"
             fx:controller="org.pon1645.ooprojekt.presenter.SimulationPresenter">
     <padding>
-        <Insets top="60" right="10" bottom="60" left="10"/>
+        <Insets top="50" right="50" bottom="50" left="50"/>
     </padding>
-    <top>
-        <HBox alignment="CENTER">
-            <Label fx:id="message" textAlignment="CENTER" text="test message REMOVE ME"/>
-        </HBox>
-    </top>
     <center>
-        <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER" />
+        <HBox alignment="CENTER" minWidth="650.0">
+            <Region HBox.hgrow="ALWAYS"/>
+            <GridPane alignment="CENTER_LEFT" hgap="10" vgap="10">
+                <Label text="Liczba zwierząt:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label fx:id="animalAmount" text="0" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Label text="Liczba roślin:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label fx:id="plantAmount" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label text="Wolne pola:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label fx:id="freeSpaces" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Label text="Najpopularniejszy genotyp:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <Label fx:id="mostPopularGene" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <Label text="Średni poziom energii:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <Label fx:id="averageEnergy" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <Label text="Średnia długość życia:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <Label fx:id="averageLifespan" text="0" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                <Label text="Średnia liczba dzieci:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                <Label fx:id="averageChildren" text="0" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+            </GridPane>
+            <Region HBox.hgrow="ALWAYS"/>
+            <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER" />
+            <Region HBox.hgrow="ALWAYS"/>
+            <GridPane alignment="CENTER_RIGHT" hgap="10" vgap="10">
+                <ImageView fx:id="selectedImage" fitWidth="120" fitHeight="120" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <Image url="@images/empty.png"/>
+                </ImageView>
+                <Label text="Genotyp:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label fx:id="selectedGenome" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label text="Aktywne geny:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label fx:id="selectedActiveGenes" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Label text="Energia:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <Label fx:id="selectedEnergy" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <Label text="Zjedzone rośliny:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <Label fx:id="selectedGrass" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <Label text="Dzieci:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <Label fx:id="selectedChildren" text="0" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                <Label text="Potomków:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                <Label fx:id="selectedRelatives" text="0" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <Label text="Wiek:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+                <Label fx:id="selectedAge" text="0" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+            </GridPane>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
     </center>
     <bottom>
-        <HBox alignment="CENTER">
-            <CheckBox fx:id="debug" text="Debug"/>
-        </HBox>
+        <VBox alignment="CENTER">
+            <CheckBox fx:id="debug" text="Debug" onAction="#onDebugPressed"/>
+            <Button fx:id="pauseButton" onAction="#onPauseButtonClicked" style="-fx-text-fill: green" text="wstrzymaj/wznów"/>
+        </VBox>
     </bottom>
 </BorderPane>

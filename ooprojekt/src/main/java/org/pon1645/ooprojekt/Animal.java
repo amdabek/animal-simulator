@@ -125,6 +125,10 @@ public class Animal implements IElements {
         return position;
     }
 
+    public MapDirection getDirection() { return direction; }
+
+    public Genes getGenes() { return genes; }
+
     private MapDirection randomOrientation(){
         return MapDirection.values()[new Random().nextInt(8)];
     }

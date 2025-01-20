@@ -2,11 +2,12 @@ package org.pon1645.ooprojekt;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
-public class SimulationEngine implements IObserver {
+public class SimulationEngine implements IObserver, Callable<Void> {
     private final GlobeMap map;
     private final List<Animal> animals = new ArrayList<>();
-    private boolean running = false;
+    //private boolean running = false;
     private final long stepDelay = 500;
 
     public SimulationEngine(GlobeMap map) {
@@ -30,9 +31,10 @@ public class SimulationEngine implements IObserver {
         animals.add(a);
     }
 
-    public void run(int days) {
+    public void run(int days) throws InterruptedException {
         for(int i=0; i<days; i++){
             doOneDay();
+            Thread.sleep(stepDelay);
         }
     }
 
@@ -109,7 +111,13 @@ public class SimulationEngine implements IObserver {
         }
     }
 
-    public List<Animal> getAnimals(){
-        return animals;
+    @Override
+    public Void call() throws InterruptedException {
+        run(1000);
+        return null;
     }
+
+    public List<Animal> getAnimals() { return animals; }
+
+    public GlobeMap getMap() { return map; }
 }

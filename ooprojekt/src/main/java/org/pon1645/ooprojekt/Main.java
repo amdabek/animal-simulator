@@ -21,6 +21,6 @@ public class Main {
         SimulationEngine engine = new SimulationEngine(map);
 
         engine.generateInitialPlantsAndAnimals();
-        engine.run(10);
+        //engine.run(10);
     }
 }

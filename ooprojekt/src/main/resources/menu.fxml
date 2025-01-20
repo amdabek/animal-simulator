@@ -30,13 +30,13 @@
         <TextField fx:id="plantNumber" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
         <Label text="Wariant roślin:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
         <HBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2">
-            <RadioButton fx:id="equatorial" text="Zalesione równiki">
+            <RadioButton fx:id="equatorial" selected="true" userData="equatorial" text="Zalesione równiki">
                 <toggleGroup>
                     <ToggleGroup fx:id="plants"/>
                 </toggleGroup>
             </RadioButton>
             <Region HBox.hgrow="ALWAYS"/>
-            <RadioButton fx:id="jungle" text="Pełzająca dżungla">
+            <RadioButton fx:id="jungle" userData="jungle" text="Pełzająca dżungla">
                 <toggleGroup>
                     <fx:reference source="plants"/>
                 </toggleGroup>
@@ -45,13 +45,13 @@
         </HBox>
         <Label text="Wariant mutacji:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
         <HBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3">
-            <RadioButton userData="random" text="Pełna losowość">
+            <RadioButton fx:id="random" selected="true" userData="random" text="Pełna losowość">
                 <toggleGroup>
                     <ToggleGroup fx:id="mutation"/>
                 </toggleGroup>
             </RadioButton>
             <Region HBox.hgrow="ALWAYS"/>
-            <RadioButton userData="cautious" text="Lekka korekta">
+            <RadioButton fx:id="cautious" userData="cautious" text="Lekka korekta">
                 <toggleGroup>
                     <fx:reference source="mutation"/>
                 </toggleGroup>
@@ -68,7 +68,7 @@
         <TextField fx:id="energy" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
         <Label text="Energia do najedzenia:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
         <TextField fx:id="fullEnergy" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
-        <Label text="Energia na rozmnażanie:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+        <Label text="Odsetek energii na rozmnażanie:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
         <TextField fx:id="reproduceEnergy" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
         <Label text="Liczba mutacji:" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
         <HBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="10">
@@ -86,6 +86,6 @@
         <Button text="Uruchom symulację" onAction="#onStartButtonClick"/>
     </HBox>
     <HBox alignment="CENTER">
-        <Label fx:id="message" style="-fx-text-fill: green" text="Example message REMOVE ME"/>
+        <Label fx:id="message" style="-fx-text-fill: green"/>
     </HBox>
 </VBox>
