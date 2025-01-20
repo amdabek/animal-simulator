@@ -60,7 +60,7 @@ public class MenuPresenter implements Initializable {
         config.genomeLength = Integer.parseInt(genomeLength.getText());
         config.minMutation = Integer.parseInt(minMutations.getText());
         config.maxMutation = Integer.parseInt(maxMutations.getText());
-        if (config.maxMutation > config.minMutation)
+        if (config.maxMutation < config.minMutation)
             throw new IllegalArgumentException("Niepoprawny zakres mutacji");
         config.plantEnergy = Integer.parseInt(energyPerMeal.getText());
         config.plantGrowthVariant = plants.getSelectedToggle().getUserData().toString().equals("jungle") ? PlantGrowthVariant.FOREST_CREEPING : PlantGrowthVariant.EQUATOR;
