@@ -11,6 +11,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Slider?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="550.0" minWidth="850.0"
@@ -28,14 +29,15 @@
                 <Label fx:id="plantAmount" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                 <Label text="Wolne pola:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
                 <Label fx:id="freeSpaces" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                <Label text="Najpopularniejszy genotyp:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                <Label fx:id="mostPopularGene" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-                <Label text="Średni poziom energii:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                <Label fx:id="averageEnergy" text="0" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-                <Label text="Średnia długość życia:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-                <Label fx:id="averageLifespan" text="0" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-                <Label text="Średnia liczba dzieci:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-                <Label fx:id="averageChildren" text="0" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <Label text="Najpopularniejsze genotypy:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <VBox fx:id="mostPopularGenotypes" GridPane.columnIndex="0" GridPane.rowIndex="4">
+                </VBox>
+                <Label text="Średni poziom energii:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <Label fx:id="averageEnergy" text="0" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                <Label text="Średnia długość życia:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                <Label fx:id="averageLifespan" text="0" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <Label text="Średnia liczba dzieci:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+                <Label fx:id="averageChildren" text="0" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
             </GridPane>
             <Region HBox.hgrow="ALWAYS"/>
             <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER" />
@@ -63,8 +65,8 @@
         </HBox>
     </center>
     <bottom>
-        <VBox alignment="CENTER">
-            <CheckBox fx:id="debug" text="Debug" onAction="#onDebugPressed"/>
+        <VBox alignment="CENTER" spacing="20">
+            <CheckBox fx:id="debug" text="Widok debugowania" onAction="#onDebugPressed"/>
             <Button fx:id="pauseButton" onAction="#onPauseButtonClicked" style="-fx-text-fill: green" text="wstrzymaj/wznów"/>
         </VBox>
     </bottom>
