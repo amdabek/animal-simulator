@@ -185,4 +185,22 @@ public class GlobeMap implements IWorldMap {
         return grasses;
     }
 
+    public boolean isPreferredField(Vector2d pos) {
+        switch(config.plantGrowthVariant) {
+            case EQUATOR -> {
+                int eqMin = (int)Math.floor(height*0.4);
+                int eqMax = (int)Math.ceil(height*0.6);
+                return pos.y >= eqMin && pos.y < eqMax;
+            }
+            case FOREST_CREEPING -> {
+                List<Vector2d> neighbors = getNeighbors(pos);
+                for(Vector2d n: neighbors){
+                    if(grasses.containsKey(n)) return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
 }
