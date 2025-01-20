@@ -13,6 +13,7 @@ import org.pon1645.ooprojekt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
@@ -44,12 +45,15 @@ public class MenuPresenter implements Initializable {
     private final Preferences prefs = Preferences.userRoot().node(this.getClass().getName());
     private final ExecutorService executorService = Executors.newFixedThreadPool(4);
     public TextField reproduceEnergyFraction;
+    private int simulations = 0;
 
     private void configureSimulation() {
         config.width = Integer.parseInt(width.getText());
         config.height = Integer.parseInt(height.getText());
         config.plantsPerDay = Integer.parseInt(plantsPerDay.getText());
         config.reproductionEnergyFraction = Double.parseDouble(reproduceEnergyFraction.getText());
+        if (config.reproductionEnergyFraction < 0 || config.reproductionEnergyFraction > 1)
+            throw new NumberFormatException("Odsetek energii z zakresu [0;1]");
         config.startEnergy = Integer.parseInt(energy.getText());
         config.mutationVariant = mutation.getSelectedToggle().getUserData().toString().equals("cautious") ? MutationVariant.LIGHT_CORRECTION : MutationVariant.FULL_RANDOM;
         config.initialAnimals = Integer.parseInt(animals.getText());
@@ -57,6 +61,8 @@ public class MenuPresenter implements Initializable {
         config.genomeLength = Integer.parseInt(genomeLength.getText());
         config.minMutation = Integer.parseInt(minMutations.getText());
         config.maxMutation = Integer.parseInt(maxMutations.getText());
+        if (config.maxMutation > config.minMutation)
+            throw new IllegalArgumentException("Niepoprawny zakres mutacji");
         config.plantEnergy = Integer.parseInt(energyPerMeal.getText());
         config.plantGrowthVariant = plants.getSelectedToggle().getUserData().toString().equals("jungle") ? PlantGrowthVariant.FOREST_CREEPING : PlantGrowthVariant.EQUATOR;
         config.minEnergyToReproduce = Integer.parseInt(reproduceEnergy.getText());
@@ -84,7 +90,7 @@ public class MenuPresenter implements Initializable {
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
         var scene = new Scene(viewRoot);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Simulation " + "simulationEngine.size()");
+        primaryStage.setTitle("Simulation " + simulations);
         primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
         primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
     }
@@ -110,12 +116,21 @@ public class MenuPresenter implements Initializable {
             return;
         }
         SimulationPresenter presenter = loader.getController();
-        configureSimulation();
+        try {
+            configureSimulation();
+        } catch (Exception e) {
+            setError(e.getMessage());
+            return;
+        }
         GlobeMap map = new GlobeMap(config);
         SimulationEngine engine = new SimulationEngine(map);
         engine.generateInitialPlantsAndAnimals();
         configureStage(newSimulation, viewRoot);
         newSimulation.show();
+        newSimulation.setOnHidden(e -> {
+            presenter.pause();
+            simulations--;
+        });
         presenter.startSimulation(engine, executorService);
         setSuccess("Uruchomiono symulację");
     }

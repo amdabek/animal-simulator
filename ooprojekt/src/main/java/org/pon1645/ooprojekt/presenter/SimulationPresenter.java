@@ -118,7 +118,7 @@ public class SimulationPresenter implements IObserver {
                     cellImageView.setFitHeight(size);
                     if (debug.isSelected()) {
                         Label prefferedLabel = new Label();
-                        if (true) {
+                        if (globeMap.isPreferredField(location)) {
                             prefferedLabel.setText("P");
                             prefferedLabel.setStyle("-fx-text-fill: #006400");
                         }
@@ -179,15 +179,17 @@ public class SimulationPresenter implements IObserver {
         Platform.runLater(this::update);
     }
 
+    public void pause() {
+        future.cancel(true);
+        pauseButton.setStyle("-fx-text-fill: red");
+    }
+
     public void onPauseButtonClicked(ActionEvent actionEvent) {
         if (future.isCancelled()) {
             future = executorService.submit(simulation);
             pauseButton.setStyle("-fx-text-fill: green");
         }
-        else {
-            future.cancel(true);
-            pauseButton.setStyle("-fx-text-fill: red");
-        }
+        else pause();
     }
 
     public void onDebugPressed(ActionEvent actionEvent) {
