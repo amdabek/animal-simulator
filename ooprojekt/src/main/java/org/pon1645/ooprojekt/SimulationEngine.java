@@ -12,9 +12,42 @@ public class SimulationEngine implements IObserver, Callable<Void> {
     private long totalDeadAnimals = 0;
     private long totalDeadAnimalsLifeSpan = 0;
 
+    public int getPlantCount() {
+        return plantCount;
+    }
+
+    public int getFreeFields() {
+        return freeFields;
+    }
+
+    public List<String> getMostPopularGenomes() {
+        return mostPopularGenomes;
+    }
+
+    public double getAvgEnergy() {
+        return avgEnergy;
+    }
+
+    public double getAvgLifeSpan() {
+        return avgLifeSpan;
+    }
+
+    public double getAvgChildren() {
+        return avgChildren;
+    }
+
+    private int plantCount = 0;
+    private int freeFields = 0;
+    private List<String> mostPopularGenomes = new ArrayList<>();
+    private double avgEnergy;
+    private double avgLifeSpan;
+    private double avgChildren;
+
     public SimulationEngine(GlobeMap map) {
         this.map = map;
     }
+
+    public int getCurrentDay() { return currentDay; }
 
     public void generateInitialPlantsAndAnimals() {
         for (int i = 0; i < map.getConfig().initialPlants; i++) {
@@ -178,6 +211,7 @@ public class SimulationEngine implements IObserver, Callable<Void> {
                     totalDeadAnimalsLifeSpan += (a.getDeathDay() - a.getBirthDay());
                 }
                 toRemove.add(a);
+                map.removeAnimal(a);
             }
         }
         animals.removeAll(toRemove);
@@ -186,11 +220,11 @@ public class SimulationEngine implements IObserver, Callable<Void> {
 
     private void updateStats() {
 
-        int plantCount = map.getGrasses().size();
+        plantCount = map.getGrasses().size();
 
         int width = map.getWidth();
         int height = map.getHeight();
-        int freeFields = 0;
+        freeFields = 0;
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
                 Vector2d pos = new Vector2d(x,y);
@@ -216,10 +250,11 @@ public class SimulationEngine implements IObserver, Callable<Void> {
                 maxCount = e.getValue();
             }
         }
-        List<String> mostPopularGenotypes = new ArrayList<>();
+
+        mostPopularGenomes = new ArrayList<>();
         for(var e : genotypeCount.entrySet()){
             if(e.getValue() == maxCount){
-                mostPopularGenotypes.add(e.getKey());
+                mostPopularGenomes.add(e.getKey());
             }
         }
 
@@ -232,10 +267,10 @@ public class SimulationEngine implements IObserver, Callable<Void> {
                 totalEnergy += a.getEnergy();
             }
         }
-        double avgEnergy = (livingCount == 0) ? 0 : (double)totalEnergy / livingCount;
+        avgEnergy = (livingCount == 0) ? 0 : (double)totalEnergy / livingCount;
 
         //Średnia długość życia martwych zwierząt
-        double avgLifeSpan = (totalDeadAnimals == 0) ? 0 :
+        avgLifeSpan = (totalDeadAnimals == 0) ? 0 :
                 (double) totalDeadAnimalsLifeSpan / totalDeadAnimals;
 
         // Średnia liczba dzieci
@@ -245,7 +280,7 @@ public class SimulationEngine implements IObserver, Callable<Void> {
                 totalChildrenOfLiving += a.getChildrenCount();
             }
         }
-        double avgChildren = (livingCount == 0) ? 0 :
+        avgChildren = (livingCount == 0) ? 0 :
                 (double) totalChildrenOfLiving / livingCount;
 
 

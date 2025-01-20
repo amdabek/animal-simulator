@@ -66,10 +66,10 @@
         <TextField fx:id="animals" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
         <Label text="Startowa energia" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
         <TextField fx:id="energy" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
-        <Label text="Energia do najedzenia:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
-        <TextField fx:id="fullEnergy" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+        <Label text="Minminalna energia do najedzenia:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+        <TextField fx:id="reproduceEnergy" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
         <Label text="Odsetek energii na rozmnażanie:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
-        <TextField fx:id="reproduceEnergy" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+        <TextField fx:id="reproduceEnergyFraction" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
         <Label text="Liczba mutacji:" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
         <HBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="10">
             <Label text="od: "/>

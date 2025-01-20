@@ -30,7 +30,6 @@ public class MenuPresenter implements Initializable {
     public TextField plantsPerDay;
     public TextField animals;
     public TextField energy;
-    public TextField fullEnergy;
     public TextField reproduceEnergy;
     public TextField minMutations;
     public TextField maxMutations;
@@ -44,12 +43,13 @@ public class MenuPresenter implements Initializable {
     private final SimulationConfig config = new SimulationConfig();
     private final Preferences prefs = Preferences.userRoot().node(this.getClass().getName());
     private final ExecutorService executorService = Executors.newFixedThreadPool(4);
+    public TextField reproduceEnergyFraction;
 
     private void configureSimulation() {
         config.width = Integer.parseInt(width.getText());
         config.height = Integer.parseInt(height.getText());
         config.plantsPerDay = Integer.parseInt(plantsPerDay.getText());
-        config.reproductionEnergyFraction = Double.parseDouble(reproduceEnergy.getText());
+        config.reproductionEnergyFraction = Double.parseDouble(reproduceEnergyFraction.getText());
         config.startEnergy = Integer.parseInt(energy.getText());
         config.mutationVariant = mutation.getSelectedToggle().getUserData().toString().equals("cautious") ? MutationVariant.LIGHT_CORRECTION : MutationVariant.FULL_RANDOM;
         config.initialAnimals = Integer.parseInt(animals.getText());
@@ -59,6 +59,7 @@ public class MenuPresenter implements Initializable {
         config.maxMutation = Integer.parseInt(maxMutations.getText());
         config.plantEnergy = Integer.parseInt(energyPerMeal.getText());
         config.plantGrowthVariant = plants.getSelectedToggle().getUserData().toString().equals("jungle") ? PlantGrowthVariant.FOREST_CREEPING : PlantGrowthVariant.EQUATOR;
+        config.minEnergyToReproduce = Integer.parseInt(reproduceEnergy.getText());
     }
 
     public void onSaveButtonClick(ActionEvent actionEvent) {
@@ -76,6 +77,7 @@ public class MenuPresenter implements Initializable {
         prefs.putInt("maxMutation", config.maxMutation);
         prefs.putInt("plantEnergy", config.plantEnergy);
         prefs.putBoolean("jungle", config.plantGrowthVariant == PlantGrowthVariant.FOREST_CREEPING);
+        prefs.putInt("minEnergyToReproduce", config.minEnergyToReproduce);
         setSuccess("Konfiguracja zapisana");
     }
 
@@ -131,6 +133,8 @@ public class MenuPresenter implements Initializable {
         minMutations.setText(prefs.get("minMutation", ""));
         maxMutations.setText(prefs.get("maxMutation", ""));
         genomeLength.setText(prefs.get("genomeLength", ""));
+        reproduceEnergy.setText(prefs.get("minEnergyToReproduce", ""));
+        reproduceEnergyFraction.setText(prefs.get("reproductionEnergyFraction", ""));
         if (prefs.getBoolean("cautious", false))
             cautious.setSelected(true);
         if (prefs.getBoolean("jungle", false))
@@ -139,5 +143,6 @@ public class MenuPresenter implements Initializable {
 
     public void shutdown() {
         executorService.shutdownNow();
+        Platform.exit();
     }
 }
