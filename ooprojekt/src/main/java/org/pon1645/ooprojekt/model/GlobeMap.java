@@ -1,4 +1,6 @@
-package org.pon1645.ooprojekt;
+package org.pon1645.ooprojekt.model;
+
+import org.pon1645.ooprojekt.SimulationConfig;
 
 import java.util.*;
 
@@ -7,7 +9,7 @@ public class GlobeMap implements IWorldMap {
     private final int height;
     private final SimulationConfig config;
     private final Map<Vector2d,List<Animal>> animalsOnMap = new HashMap<>();
-    private final Map<Vector2d,Grass> grasses = new HashMap<>();
+    private final Map<Vector2d, Grass> grasses = new HashMap<>();
 
     public GlobeMap(SimulationConfig cfg){
         width=cfg.width; height=cfg.height; config=cfg;
@@ -60,7 +62,7 @@ public class GlobeMap implements IWorldMap {
     }
 
     public void growPlants(){
-        if(config.plantGrowthVariant==PlantGrowthVariant.FOREST_CREEPING){
+        if(config.plantGrowthVariant== PlantGrowthVariant.FOREST_CREEPING){
             growPlantsForestCreeping();
         } else {
             growPlantsEquator();

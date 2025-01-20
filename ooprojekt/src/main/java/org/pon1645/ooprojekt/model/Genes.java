@@ -1,4 +1,6 @@
-package org.pon1645.ooprojekt;
+package org.pon1645.ooprojekt.model;
+
+import org.pon1645.ooprojekt.SimulationConfig;
 
 import java.util.ArrayList;
 import java.util.List;

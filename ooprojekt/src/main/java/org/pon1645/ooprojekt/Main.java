@@ -1,5 +1,10 @@
 package org.pon1645.ooprojekt;
 
+import org.pon1645.ooprojekt.model.Animal;
+import org.pon1645.ooprojekt.model.GlobeMap;
+import org.pon1645.ooprojekt.model.MutationVariant;
+import org.pon1645.ooprojekt.model.PlantGrowthVariant;
+
 public class Main {
     public static void main(String[] args) {
         SimulationConfig config = new SimulationConfig();

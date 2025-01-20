@@ -1,5 +1,7 @@
 package org.pon1645.ooprojekt;
 
+import org.pon1645.ooprojekt.model.*;
+
 import java.util.*;
 import java.util.concurrent.Callable;
 

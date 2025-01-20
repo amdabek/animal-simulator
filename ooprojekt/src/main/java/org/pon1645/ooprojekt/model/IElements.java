@@ -1,6 +1,4 @@
-package org.pon1645.ooprojekt;
-
-import java.awt.*;
+package org.pon1645.ooprojekt.model;
 
 public interface IElements {
     Vector2d getPosition();

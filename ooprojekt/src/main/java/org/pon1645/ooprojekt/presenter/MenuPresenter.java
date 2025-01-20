@@ -9,16 +9,15 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.pon1645.ooprojekt.*;
+import org.pon1645.ooprojekt.model.GlobeMap;
+import org.pon1645.ooprojekt.model.MutationVariant;
+import org.pon1645.ooprojekt.model.PlantGrowthVariant;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.prefs.Preferences;
 
 public class MenuPresenter implements Initializable {
@@ -133,6 +132,7 @@ public class MenuPresenter implements Initializable {
         });
         presenter.startSimulation(engine, executorService);
         setSuccess("Uruchomiono symulację");
+        simulations++;
     }
 
     @Override

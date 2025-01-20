@@ -1,6 +1,5 @@
-package org.pon1645.ooprojekt;
+package org.pon1645.ooprojekt.model;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

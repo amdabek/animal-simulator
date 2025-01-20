@@ -2,22 +2,22 @@ package org.pon1645.ooprojekt.presenter;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import org.pon1645.ooprojekt.*;
+import org.pon1645.ooprojekt.model.Animal;
+import org.pon1645.ooprojekt.model.GlobeMap;
+import org.pon1645.ooprojekt.model.IObserver;
+import org.pon1645.ooprojekt.model.Vector2d;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Objects;
-import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 

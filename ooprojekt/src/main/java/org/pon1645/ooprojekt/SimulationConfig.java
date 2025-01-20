@@ -1,5 +1,8 @@
 package org.pon1645.ooprojekt;
 
+import org.pon1645.ooprojekt.model.MutationVariant;
+import org.pon1645.ooprojekt.model.PlantGrowthVariant;
+
 public class SimulationConfig {
     public int width;
     public int height;

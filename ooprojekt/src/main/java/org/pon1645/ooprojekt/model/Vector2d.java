@@ -1,4 +1,4 @@
-package org.pon1645.ooprojekt;
+package org.pon1645.ooprojekt.model;
 
 import java.util.Objects;
 
