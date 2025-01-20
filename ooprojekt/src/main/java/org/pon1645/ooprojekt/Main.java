@@ -5,22 +5,39 @@ public class Main {
         SimulationConfig config = new SimulationConfig();
         config.width = 10;
         config.height = 10;
-        config.initialAnimals = 3;
+        config.initialAnimals = 5;
         config.initialPlants = 5;
-        config.startEnergy = 10;
-        config.plantEnergy = 4;
-        config.plantsPerDay = 1;
-        config.genomeLength = 6;
+        config.startEnergy = 20;
+        config.plantEnergy = 10;
+        config.plantsPerDay = 2;
+        config.minEnergyToReproduce = 15;
+        config.reproductionEnergyFraction = 0.25;
         config.minMutation = 1;
-        config.maxMutation = 4;
+        config.maxMutation = 3;
         config.mutationVariant = MutationVariant.FULL_RANDOM;
         config.plantGrowthVariant = PlantGrowthVariant.EQUATOR;
-        config.reproductionEnergyFraction = 0.5;
+        config.genomeLength = 8;
 
         GlobeMap map = new GlobeMap(config);
         SimulationEngine engine = new SimulationEngine(map);
-
         engine.generateInitialPlantsAndAnimals();
-        //engine.run(10);
+
+        try {
+            int daysToSimulate = 10;
+            engine.run(daysToSimulate);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Symulacja zakończona.");
+
+        for (Animal animal : engine.getAnimals()) {
+            String status = animal.isDead() ? " (martwy)" : " (żywy)";
+            System.out.println(
+                    "Zwierzę na pozycji " + animal.getPosition() + status +
+                            ", energia = " + animal.getEnergy() +
+                            ", genom = " + animal.getGenes().toString()
+            );
+        }
     }
 }

@@ -14,4 +14,5 @@ public class SimulationConfig {
     public MutationVariant mutationVariant;
     public PlantGrowthVariant plantGrowthVariant;
     public int genomeLength;
+    public int minEnergyToReproduce;
 }

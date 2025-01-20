@@ -181,4 +181,8 @@ public class GlobeMap implements IWorldMap {
         }
         return new Vector2d(x,y);
     }
+    public Map<Vector2d, Grass> getGrasses() {
+        return grasses;
+    }
+
 }

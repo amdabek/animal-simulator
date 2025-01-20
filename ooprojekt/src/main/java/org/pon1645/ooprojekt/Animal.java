@@ -14,23 +14,32 @@ public class Animal implements IElements {
     private final Genes genes;
     private final List<IObserver> observers = new ArrayList<>();
 
-    public Animal(GlobeMap map, Vector2d pos) {
+    private final int birthDay;
+    private int deathDay = -1;
+    private int childrenCount = 0;
+    private int plantsEaten = 0;
+    private int activatedGeneIndex = -1;
+    private final List<Animal> children = new ArrayList<>();
+
+    public Animal(GlobeMap map, Vector2d pos, int currentDay) {
         this.map = map;
         position = pos;
         direction = randomOrientation();
         energy = map.getConfig().startEnergy;
         startEnergy = map.getConfig().startEnergy;
         genes = new Genes(map.getConfig());
+        this.birthDay = currentDay;
         map.placeAnimal(this);
     }
 
-    public Animal(GlobeMap map, Vector2d pos, int childEnergy, Genes childGenes) {
+    public Animal(GlobeMap map, Vector2d pos, int childEnergy, Genes childGenes, int currentDay) {
         this.map = map;
         position = pos;
         direction = randomOrientation();
         energy = childEnergy;
         startEnergy = map.getConfig().startEnergy;
         genes = childGenes;
+        this.birthDay = currentDay;
         map.placeAnimal(this);
     }
 
@@ -74,23 +83,38 @@ public class Animal implements IElements {
     }
 
     public void rotateAccordingToGene(){
-        int g = genes.getRandomGene();
-        for(int i=0; i<g; i++){
+        int index = new Random().nextInt(genes.size());
+        int geneVal = genes.getGene(index);
+        this.activatedGeneIndex = index;
+        for(int i=0; i<geneVal; i++){
             direction = direction.next();
         }
     }
 
-    public Animal reproduceWith(Animal partner){
+    public Animal reproduceWith(Animal partner, int currentDay){
         double frac = map.getConfig().reproductionEnergyFraction;
+
         int f = (int)(energy * frac);
         int m = (int)(partner.energy * frac);
-        energy -= f;
+
+        this.energy -= f;
         partner.energy -= m;
+
         int childEnergy = f + m;
-        double ratio = (childEnergy==0)?0.5: (double)f/childEnergy;
+        double ratio = (childEnergy == 0) ? 0.5 : (double)f / childEnergy;
+
         Genes childGenes = new Genes(this.genes, partner.genes, ratio, map.getConfig());
         childGenes.mutate(map.getConfig());
-        return new Animal(map, position, childEnergy, childGenes);
+
+        Animal child = new Animal(map, position, childEnergy, childGenes, currentDay);
+
+        this.childrenCount++;
+        partner.childrenCount++;
+
+        this.children.add(child);
+        partner.children.add(child);
+
+        return child;
     }
 
     public void addEnergy(int v){
@@ -131,6 +155,52 @@ public class Animal implements IElements {
 
     private MapDirection randomOrientation(){
         return MapDirection.values()[new Random().nextInt(8)];
+    }
+
+    public int getActivatedGeneIndex() {
+        return activatedGeneIndex;
+    }
+
+    public int getPlantsEaten() {
+        return plantsEaten;
+    }
+
+    public void incrementPlantsEaten() {
+        this.plantsEaten++;
+    }
+
+    public int getChildrenCount() {
+        return childrenCount;
+    }
+
+    public int getDescendantsCount() {
+        int count = 0;
+        List<Animal> queue = new ArrayList<>(children);
+        while(!queue.isEmpty()){
+            Animal a = queue.remove(0);
+            count++;
+            queue.addAll(a.children);
+        }
+        return count;
+    }
+
+    public int getBirthDay() {
+        return birthDay;
+    }
+
+    public int getDeathDay() {
+        return deathDay;
+    }
+
+    public void setDeathDay(int day) {
+        this.deathDay = day;
+    }
+
+    public int getDaysLived(int currentDay) {
+        if (isDead() && deathDay >= 0) {
+            return deathDay - birthDay;
+        }
+        return currentDay - birthDay;
     }
 
 }

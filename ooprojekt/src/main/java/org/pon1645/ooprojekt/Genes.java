@@ -87,4 +87,12 @@ public class Genes {
     public String toString(){
         return genes.toString();
     }
+
+    public int size() {
+        return genomeLength;
+    }
+
+    public int getGene(int idx) {
+        return genes.get(idx);
+    }
 }

@@ -1,14 +1,18 @@
 package org.pon1645.ooprojekt;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 public class SimulationEngine implements IObserver, Callable<Void> {
     private final GlobeMap map;
     private final List<Animal> animals = new ArrayList<>();
-    //private boolean running = false;
-    private final long stepDelay = 500;
+    private int currentDay = 0;
+
+    private long totalDeadAnimals = 0;
+    private long totalDeadAnimalsLifeSpan = 0;
 
     public SimulationEngine(GlobeMap map) {
         this.map = map;
@@ -19,58 +23,77 @@ public class SimulationEngine implements IObserver, Callable<Void> {
             map.spawnSinglePlantEquator();
         }
         for (int i = 0; i < map.getConfig().initialAnimals; i++) {
-            int x=(int)(Math.random()*map.getWidth());
-            int y=(int)(Math.random()*map.getHeight());
+            int x = (int)(Math.random() * map.getWidth());
+            int y = (int)(Math.random() * map.getHeight());
             addAnimal(new Vector2d(x,y));
         }
     }
 
     public void addAnimal(Vector2d pos) {
-        Animal a = new Animal(map, pos);
+        Animal a = new Animal(map, pos, currentDay);
         a.addObserver(this);
         animals.add(a);
     }
 
     public void run(int days) throws InterruptedException {
-        for(int i=0; i<days; i++){
+        for(int i = 0; i < days; i++){
             doOneDay();
-            Thread.sleep(stepDelay);
+            Thread.sleep(500);
         }
     }
 
     public void doOneDay() {
+
+        map.growPlants();
+        checkEating();
         rotateAll();
         moveAll();
         reproduceAll();
-        checkEating();
         removeDeadAnimals();
-        map.growPlants();
+        updateStats();
+        currentDay++;
     }
 
     private void rotateAll() {
-        for(Animal a : animals){
+        for(Animal a : animals) {
             a.rotateAccordingToGene();
         }
     }
 
     private void moveAll() {
-        for(Animal a : animals){
+        for(Animal a : animals) {
             a.move(MoveDirection.FORWARD);
             a.subtractEnergy(1);
         }
     }
 
+    private void checkEating() {
+        for(Animal a : animals) {
+            if(map.hasGrassAt(a.getPosition())){
+                a.addEnergy(map.getConfig().plantEnergy);
+                a.incrementPlantsEaten();
+                map.removeGrassAt(a.getPosition());
+            }
+        }
+    }
+
     private void reproduceAll() {
         List<Animal> newAnimals = new ArrayList<>();
-        for (Animal a : animals) {
-            for (Animal b : animals) {
-                if (a != b && a.getPosition().equals(b.getPosition())) {
-                    if (!a.isDead() && !b.isDead()) {
-                        if (a.getEnergy() > 0 && b.getEnergy() > 0) {
-                            Animal child = a.reproduceWith(b);
-                            child.addObserver(this);
-                            newAnimals.add(child);
-                        }
+        int minEnergy = map.getConfig().minEnergyToReproduce;
+
+        for (int i = 0; i < animals.size(); i++) {
+            Animal a = animals.get(i);
+            if (a.isDead()) continue;
+
+            for (int j = i+1; j < animals.size(); j++) {
+                Animal b = animals.get(j);
+                if (b.isDead()) continue;
+
+                if (a.getPosition().equals(b.getPosition())) {
+                    if(a.getEnergy() >= minEnergy && b.getEnergy() >= minEnergy) {
+                        Animal child = a.reproduceWith(b, currentDay);
+                        child.addObserver(this);
+                        newAnimals.add(child);
                     }
                 }
             }
@@ -78,17 +101,87 @@ public class SimulationEngine implements IObserver, Callable<Void> {
         animals.addAll(newAnimals);
     }
 
-    private void checkEating() {
-        for(Animal a : animals){
-            if(map.hasGrassAt(a.getPosition())){
-                a.addEnergy(map.getConfig().plantEnergy);
-                map.removeGrassAt(a.getPosition());
+    private void removeDeadAnimals() {
+        List<Animal> toRemove = new ArrayList<>();
+        for(Animal a : animals) {
+            if(a.isDead()) {
+                if(a.getDeathDay() < 0) {
+                    a.setDeathDay(currentDay);
+                    totalDeadAnimals++;
+                    totalDeadAnimalsLifeSpan += (a.getDeathDay() - a.getBirthDay());
+                }
+                toRemove.add(a);
             }
         }
+        animals.removeAll(toRemove);
     }
 
-    private void removeDeadAnimals() {
-        animals.removeIf(Animal::isDead);
+
+    private void updateStats() {
+
+        int plantCount = map.getGrasses().size();
+
+        int width = map.getWidth();
+        int height = map.getHeight();
+        int freeFields = 0;
+        for(int x = 0; x < width; x++){
+            for(int y = 0; y < height; y++){
+                Vector2d pos = new Vector2d(x,y);
+                boolean hasAnimal = map.hasAnimalAt(pos);
+                boolean hasGrass = map.hasGrassAt(pos);
+                if(!hasAnimal && !hasGrass) {
+                    freeFields++;
+                }
+            }
+        }
+
+        Map<String,Integer> genotypeCount = new HashMap<>();
+        for(Animal a : animals){
+            if(!a.isDead()){
+                String genotypeStr = a.getGenes().toString();
+                genotypeCount.put(genotypeStr, genotypeCount.getOrDefault(genotypeStr, 0) + 1);
+            }
+        }
+
+        int maxCount = 0;
+        for(var e : genotypeCount.entrySet()){
+            if(e.getValue() > maxCount){
+                maxCount = e.getValue();
+            }
+        }
+        List<String> mostPopularGenotypes = new ArrayList<>();
+        for(var e : genotypeCount.entrySet()){
+            if(e.getValue() == maxCount){
+                mostPopularGenotypes.add(e.getKey());
+            }
+        }
+
+        //Średni poziom energii żyjących zwierząt
+        int livingCount = 0;
+        int totalEnergy = 0;
+        for(Animal a : animals){
+            if(!a.isDead()){
+                livingCount++;
+                totalEnergy += a.getEnergy();
+            }
+        }
+        double avgEnergy = (livingCount == 0) ? 0 : (double)totalEnergy / livingCount;
+
+        //Średnia długość życia martwych zwierząt
+        double avgLifeSpan = (totalDeadAnimals == 0) ? 0 :
+                (double) totalDeadAnimalsLifeSpan / totalDeadAnimals;
+
+        // Średnia liczba dzieci
+        int totalChildrenOfLiving = 0;
+        for(Animal a : animals){
+            if(!a.isDead()){
+                totalChildrenOfLiving += a.getChildrenCount();
+            }
+        }
+        double avgChildren = (livingCount == 0) ? 0 :
+                (double) totalChildrenOfLiving / livingCount;
+
+
     }
 
     @Override
@@ -103,7 +196,6 @@ public class SimulationEngine implements IObserver, Callable<Void> {
             }
             List<Animal> newList = map.getAnimalsAt(newPosition);
             if(newList == null){
-                newList = new ArrayList<>();
                 map.placeAnimal(an);
             } else {
                 newList.add(an);
