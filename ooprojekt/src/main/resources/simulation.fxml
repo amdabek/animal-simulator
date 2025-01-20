@@ -39,7 +39,7 @@
                 <Label fx:id="averageChildren" text="0" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
             </GridPane>
             <Region HBox.hgrow="ALWAYS"/>
-            <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER" />
+            <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER" maxWidth="650"/>
             <Region HBox.hgrow="ALWAYS"/>
             <GridPane alignment="CENTER_RIGHT" hgap="10" vgap="10">
                 <ImageView fx:id="selectedImage" fitWidth="120" fitHeight="120" GridPane.columnIndex="0" GridPane.rowIndex="0">

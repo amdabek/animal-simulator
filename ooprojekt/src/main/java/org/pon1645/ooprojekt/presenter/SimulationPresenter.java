@@ -61,14 +61,12 @@ public class SimulationPresenter implements IObserver {
         GlobeMap globeMap = simulation.getMap();
         int width = globeMap.getWidth();
         int height = globeMap.getHeight();
-        float AREA = 80*13;
-        float size = Math.min(AREA/(width+1), AREA/(height+1));
-        for (int i = 0; i <= height; i++) {
+        double SIZE = 650;
+        double size = Math.min(SIZE/(width+1), SIZE/(height+1));
+        for (int i = 0; i <= height; i++)
             mapGrid.getRowConstraints().add(new RowConstraints(size));
-        }
-        for (int i = 0; i <= width; i++) {
+        for (int i = 0; i <= width; i++)
             mapGrid.getColumnConstraints().add(new ColumnConstraints(size));
-        }
         for (int i = 0; i <= height; i++) {
             for (int j = 0; j <= width; j++) {
                 Node cell;
