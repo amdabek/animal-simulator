@@ -80,10 +80,10 @@ public class Genes {
         }
     }
 
-    public int getRandomGene(){
-        Random rand = new Random();
-        return genes.get(rand.nextInt(genomeLength));
-    }
+//    public int getRandomGene(){
+//        Random rand = new Random();
+//        return genes.get(rand.nextInt(genomeLength));
+//    }
 
     @Override
     public String toString(){

@@ -146,8 +146,8 @@ public class GlobeMap implements IWorldMap {
 
     private void spawnPlantInEquatorRange(int eqMin,int eqMax){
         Random r=new Random();
-        int maxA=50;
-        while(maxA-->0){
+        int attempts = width * height;
+        while (attempts-- > 0) {
             int x=r.nextInt(width);
             int y=r.nextInt(eqMax-eqMin)+eqMin;
             Vector2d p=new Vector2d(x,y);
@@ -160,8 +160,8 @@ public class GlobeMap implements IWorldMap {
 
     private void spawnPlantOutsideEquatorRange(int eqMin,int eqMax){
         Random r=new Random();
-        int maxA=50;
-        while(maxA-->0){
+        int attempts = width * height;
+        while (attempts-- > 0) {
             int x=r.nextInt(width);
             int y=r.nextInt(height);
             if(y<eqMin||y>=eqMax){

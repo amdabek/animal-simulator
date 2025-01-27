@@ -76,13 +76,12 @@ public class SimulationEngine implements IObserver, Callable<Void> {
     }
 
     public void doOneDay() {
-        reproduceAll();
-        map.growPlants();
-        checkEating();
+        removeDeadAnimals();
         rotateAll();
         moveAll();
-
-        removeDeadAnimals();
+        checkEating();
+        reproduceAll();
+        map.growPlants();
         updateStats();
         currentDay++;
     }

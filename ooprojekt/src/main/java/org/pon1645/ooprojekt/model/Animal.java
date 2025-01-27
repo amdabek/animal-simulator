@@ -103,6 +103,7 @@ public class Animal implements IElements {
         partner.energy -= m;
 
         int childEnergy = f + m;
+
         double ratio = (childEnergy == 0) ? 0.5 : (double)f / childEnergy;
 
         Genes childGenes = new Genes(this.genes, partner.genes, ratio, map.getConfig());

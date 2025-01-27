@@ -80,17 +80,17 @@ class GenesTest {
                 "Powinno zmienić się od 1 do 3 genów w wariancie LIGHT_CORRECTION");
     }
 
-    @Test
-    void testGetRandomGene() {
-        SimulationConfig config = new SimulationConfig();
-        config.genomeLength = 5;
-        Genes g = new Genes(config);
-
-        for (int i = 0; i < 20; i++) {
-            int gene = g.getRandomGene();
-            assertTrue(gene >= 0 && gene < 8, "Wartość genu powinna być w zakresie [0, 7]");
-        }
-    }
+//    @Test
+//    void testGetRandomGene() {
+//        SimulationConfig config = new SimulationConfig();
+//        config.genomeLength = 5;
+//        Genes g = new Genes(config);
+//
+//        for (int i = 0; i < 20; i++) {
+//            int gene = g.getRandomGene();
+//            assertTrue(gene >= 0 && gene < 8, "Wartość genu powinna być w zakresie [0, 7]");
+//        }
+//    }
 
     @Test
     void testToString() {
