@@ -11,6 +11,7 @@ public class Animal implements IElements {
     private int energy;
     private final int startEnergy;
     private final Genes genes;
+    private int currentGeneIndex = 0;
     private final List<IObserver> observers = new ArrayList<>();
 
     private final int birthDay;
@@ -53,7 +54,7 @@ public class Animal implements IElements {
             case LEFT->direction = direction.previous();
             case RIGHT->direction = direction.next();
             case FORWARD->forward();
-            case BACKWARD->backward();
+//            case BACKWARD->backward();
         }
     }
 
@@ -67,28 +68,30 @@ public class Animal implements IElements {
         }
     }
 
-    private void backward(){
-        Vector2d old = position;
-        Vector2d pot = position.subtract(direction.toUnitVector());
-        Vector2d n = map.wrapPositionIfNeeded(old, pot, this);
-        if(!old.equals(n)){
-            position = n;
-            positionChanged(old, n);
-        }
-    }
+//    private void backward(){
+//        Vector2d old = position;
+//        Vector2d pot = position.subtract(direction.toUnitVector());
+//        Vector2d n = map.wrapPositionIfNeeded(old, pot, this);
+//        if(!old.equals(n)){
+//            position = n;
+//            positionChanged(old, n);
+//        }
+//    }
 
     public void reverseDirection(){
         direction = direction.opposite();
     }
 
-    public void rotateAccordingToGene(){
-        int index = new Random().nextInt(genes.size());
-        int geneVal = genes.getGene(index);
-        this.activatedGeneIndex = index;
-        for(int i=0; i<geneVal; i++){
+    public void rotateAccordingToGene() {
+        int geneVal = genes.getGene(currentGeneIndex);
+        this.activatedGeneIndex = currentGeneIndex;
+        for (int i = 0; i < geneVal; i++) {
             direction = direction.next();
         }
+
+        currentGeneIndex = (currentGeneIndex + 1) % genes.size();
     }
+
 
     public Animal reproduceWith(Animal partner, int currentDay){
         double frac = map.getConfig().reproductionEnergyFraction;

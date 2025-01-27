@@ -7,5 +7,4 @@ public interface IElements {
 
     default void addObserver(IObserver observer) { }
 
-   // Color toColor();
 }
