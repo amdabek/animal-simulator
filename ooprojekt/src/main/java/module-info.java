@@ -1,14 +1,14 @@
-module org.pon1645.ooprojekt {
-    requires javafx.controls;
+module org.ponmaj.ooprojekt {
     requires javafx.fxml;
+    requires javafx.controls;
     requires java.desktop;
     requires java.prefs;
 
 
-    opens org.pon1645.ooprojekt to javafx.fxml;
-    exports org.pon1645.ooprojekt;
-    exports org.pon1645.ooprojekt.presenter;
-    opens org.pon1645.ooprojekt.presenter to javafx.fxml;
-    exports org.pon1645.ooprojekt.model;
-    opens org.pon1645.ooprojekt.model to javafx.fxml;
+    opens org.ponmaj.ooprojekt to javafx.fxml;
+    exports org.ponmaj.ooprojekt;
+    exports org.ponmaj.ooprojekt.presenter;
+    opens org.ponmaj.ooprojekt.presenter to javafx.fxml;
+    exports org.ponmaj.ooprojekt.model;
+    opens org.ponmaj.ooprojekt.model to javafx.fxml;
 }

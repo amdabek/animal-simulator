@@ -14,7 +14,7 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="550.0" minWidth="850.0"
-            fx:controller="org.pon1645.ooprojekt.presenter.SimulationPresenter">
+            fx:controller="org.ponmaj.ooprojekt.presenter.SimulationPresenter">
     <padding>
         <Insets top="50" right="50" bottom="50" left="50"/>
     </padding>
