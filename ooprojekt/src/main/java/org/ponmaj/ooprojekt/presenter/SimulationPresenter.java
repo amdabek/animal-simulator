@@ -17,6 +17,7 @@ import org.ponmaj.ooprojekt.model.IObserver;
 import org.ponmaj.ooprojekt.model.Vector2d;
 
 import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -89,7 +90,7 @@ public class SimulationPresenter implements IObserver {
                     if (globeMap.hasAnimalAt(location)) {
                         List<Animal> animals = globeMap.getAnimalsAt(location);
                         if (animals.size() == 1) {
-                            Animal animal = animals.getFirst();
+                            Animal animal = animals.get(0);
                             cellPane.setOnMouseClicked(mouseEvent -> {
                                 selectedAnimal = animal;
                                 if (selectedPane != null)
@@ -137,7 +138,7 @@ public class SimulationPresenter implements IObserver {
     private void updateSelectedStats() {
         if (selectedAnimal != null) {
             selectedPane.setStyle("-fx-border-width: 4px; -fx-border-color: green");
-            ImageView imageView = (ImageView) selectedPane.getChildren().getFirst();
+            ImageView imageView = (ImageView) selectedPane.getChildren().get(0);
             selectedImage.setImage(imageView.getImage());
             selectedGenome.setText(selectedAnimal.getGenes().toString());
             selectedEnergy.setText(String.valueOf(selectedAnimal.getEnergy()));
@@ -164,7 +165,7 @@ public class SimulationPresenter implements IObserver {
     }
 
     private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().getFirst());
+        mapGrid.getChildren().retainAll(Collections.singleton(mapGrid.getChildren().get(0)));
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
     }

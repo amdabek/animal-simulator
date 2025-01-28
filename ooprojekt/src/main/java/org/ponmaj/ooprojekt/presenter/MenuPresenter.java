@@ -145,11 +145,13 @@ public class MenuPresenter implements Initializable {
         energyPerMeal.setText(prefs.get("plantEnergy", ""));
         animals.setText(prefs.get("initialAnimals", ""));
         energy.setText(prefs.get("startEnergy", ""));
-        reproduceEnergy.setText(prefs.get("reproductionEnergyFraction", ""));
+//        reproduceEnergy.setText(prefs.get("reproductionEnergyFraction", ""));
+        reproduceEnergy.setText(prefs.get("minEnergyToReproduce", ""));
         minMutations.setText(prefs.get("minMutation", ""));
         maxMutations.setText(prefs.get("maxMutation", ""));
         genomeLength.setText(prefs.get("genomeLength", ""));
-        reproduceEnergy.setText(prefs.get("minEnergyToReproduce", ""));
+
+//        reproduceEnergy.setText(prefs.get("minEnergyToReproduce", ""));
         reproduceEnergyFraction.setText(prefs.get("reproductionEnergyFraction", ""));
         if (prefs.getBoolean("cautious", false))
             cautious.setSelected(true);
