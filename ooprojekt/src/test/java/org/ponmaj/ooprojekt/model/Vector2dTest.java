@@ -1,7 +1,6 @@
-package org.pon1645.ooprojekt.model;
+package org.ponmaj.ooprojekt.model;
 
 import org.junit.jupiter.api.Test;
-import org.pon1645.ooprojekt.model.Vector2d;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,7 +1,7 @@
-package org.pon1645.ooprojekt.model;
+package org.ponmaj.ooprojekt.model;
 
 import org.junit.jupiter.api.Test;
-import org.pon1645.ooprojekt.SimulationConfig;
+import org.ponmaj.ooprojekt.SimulationConfig;
 
 import static org.junit.jupiter.api.Assertions.*;
 

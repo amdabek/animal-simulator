@@ -1,4 +1,4 @@
-package org.pon1645.ooprojekt.model;
+package org.ponmaj.ooprojekt.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +41,7 @@ public class Animal implements IElements {
         genes = childGenes;
         this.birthDay = currentDay;
         map.placeAnimal(this);
+        System.out.println("Animal created at position: " + position + " with energy: " + energy);
     }
 
     @Override
@@ -99,10 +100,20 @@ public class Animal implements IElements {
         int f = (int)(energy * frac);
         int m = (int)(partner.energy * frac);
 
+        System.out.println("Parent1 energy before: " + energy + ", f: " + f);
+        System.out.println("Parent2 energy before: " + partner.energy + ", m: " + m);
+
         this.energy -= f;
         partner.energy -= m;
 
         int childEnergy = f + m;
+
+        System.out.println("Child energy: " + childEnergy);
+
+        if(childEnergy <= 0){
+            System.out.println("Child energy is zero or negative, not creating child.");
+            return null;
+        }
 
         double ratio = (childEnergy == 0) ? 0.5 : (double)f / childEnergy;
 
@@ -117,8 +128,11 @@ public class Animal implements IElements {
         this.children.add(child);
         partner.children.add(child);
 
+        System.out.println("Child created at position: " + child.getPosition());
+
         return child;
     }
+
 
     public void addEnergy(int v){
         energy += v;

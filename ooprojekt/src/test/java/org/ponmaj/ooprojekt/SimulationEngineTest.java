@@ -1,9 +1,9 @@
-package org.pon1645.ooprojekt;
+package org.ponmaj.ooprojekt;
 
 import org.junit.jupiter.api.Test;
-import org.pon1645.ooprojekt.model.GlobeMap;
-import org.pon1645.ooprojekt.model.MutationVariant;
-import org.pon1645.ooprojekt.model.PlantGrowthVariant;
+import org.ponmaj.ooprojekt.model.GlobeMap;
+import org.ponmaj.ooprojekt.model.MutationVariant;
+import org.ponmaj.ooprojekt.model.PlantGrowthVariant;
 
 
 import static org.junit.jupiter.api.Assertions.*;

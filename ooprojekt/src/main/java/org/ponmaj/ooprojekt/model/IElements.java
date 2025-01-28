@@ -1,4 +1,4 @@
-package org.pon1645.ooprojekt.model;
+package org.ponmaj.ooprojekt.model;
 
 public interface IElements {
     Vector2d getPosition();

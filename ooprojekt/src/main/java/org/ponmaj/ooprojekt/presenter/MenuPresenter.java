@@ -1,4 +1,4 @@
-package org.pon1645.ooprojekt.presenter;
+package org.ponmaj.ooprojekt.presenter;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -8,10 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import org.pon1645.ooprojekt.*;
-import org.pon1645.ooprojekt.model.GlobeMap;
-import org.pon1645.ooprojekt.model.MutationVariant;
-import org.pon1645.ooprojekt.model.PlantGrowthVariant;
+import org.ponmaj.ooprojekt.SimulationConfig;
+import org.ponmaj.ooprojekt.SimulationEngine;
+import org.ponmaj.ooprojekt.model.GlobeMap;
+import org.ponmaj.ooprojekt.model.MutationVariant;
+import org.ponmaj.ooprojekt.model.PlantGrowthVariant;
 
 import java.io.IOException;
 import java.net.URL;
@@ -60,7 +61,7 @@ public class MenuPresenter implements Initializable {
         config.genomeLength = Integer.parseInt(genomeLength.getText());
         config.minMutation = Integer.parseInt(minMutations.getText());
         config.maxMutation = Integer.parseInt(maxMutations.getText());
-        if (config.maxMutation < config.minMutation)
+        if (config.maxMutation < config.minMutation || config.minMutation > config.genomeLength || config.maxMutation > config.genomeLength)
             throw new IllegalArgumentException("Niepoprawny zakres mutacji");
         config.plantEnergy = Integer.parseInt(energyPerMeal.getText());
         config.plantGrowthVariant = plants.getSelectedToggle().getUserData().toString().equals("jungle") ? PlantGrowthVariant.FOREST_CREEPING : PlantGrowthVariant.EQUATOR;
@@ -87,7 +88,7 @@ public class MenuPresenter implements Initializable {
     }
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
-        var scene = new Scene(viewRoot);
+        var scene = new Scene(viewRoot, 1200, 900);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Simulation " + simulations);
         primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
@@ -144,11 +145,13 @@ public class MenuPresenter implements Initializable {
         energyPerMeal.setText(prefs.get("plantEnergy", ""));
         animals.setText(prefs.get("initialAnimals", ""));
         energy.setText(prefs.get("startEnergy", ""));
-        reproduceEnergy.setText(prefs.get("reproductionEnergyFraction", ""));
+//        reproduceEnergy.setText(prefs.get("reproductionEnergyFraction", ""));
+        reproduceEnergy.setText(prefs.get("minEnergyToReproduce", ""));
         minMutations.setText(prefs.get("minMutation", ""));
         maxMutations.setText(prefs.get("maxMutation", ""));
         genomeLength.setText(prefs.get("genomeLength", ""));
-        reproduceEnergy.setText(prefs.get("minEnergyToReproduce", ""));
+
+//        reproduceEnergy.setText(prefs.get("minEnergyToReproduce", ""));
         reproduceEnergyFraction.setText(prefs.get("reproductionEnergyFraction", ""));
         if (prefs.getBoolean("cautious", false))
             cautious.setSelected(true);

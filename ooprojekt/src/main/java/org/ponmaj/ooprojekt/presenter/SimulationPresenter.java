@@ -1,4 +1,4 @@
-package org.pon1645.ooprojekt.presenter;
+package org.ponmaj.ooprojekt.presenter;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -10,12 +10,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.image.Image;
-import org.pon1645.ooprojekt.*;
-import org.pon1645.ooprojekt.model.Animal;
-import org.pon1645.ooprojekt.model.GlobeMap;
-import org.pon1645.ooprojekt.model.IObserver;
-import org.pon1645.ooprojekt.model.Vector2d;
+import org.ponmaj.ooprojekt.SimulationEngine;
+import org.ponmaj.ooprojekt.model.Animal;
+import org.ponmaj.ooprojekt.model.GlobeMap;
+import org.ponmaj.ooprojekt.model.IObserver;
+import org.ponmaj.ooprojekt.model.Vector2d;
 
+import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -88,7 +90,7 @@ public class SimulationPresenter implements IObserver {
                     if (globeMap.hasAnimalAt(location)) {
                         List<Animal> animals = globeMap.getAnimalsAt(location);
                         if (animals.size() == 1) {
-                            Animal animal = animals.getFirst();
+                            Animal animal = animals.get(0);
                             cellPane.setOnMouseClicked(mouseEvent -> {
                                 selectedAnimal = animal;
                                 if (selectedPane != null)
@@ -136,7 +138,7 @@ public class SimulationPresenter implements IObserver {
     private void updateSelectedStats() {
         if (selectedAnimal != null) {
             selectedPane.setStyle("-fx-border-width: 4px; -fx-border-color: green");
-            ImageView imageView = (ImageView) selectedPane.getChildren().getFirst();
+            ImageView imageView = (ImageView) selectedPane.getChildren().get(0);
             selectedImage.setImage(imageView.getImage());
             selectedGenome.setText(selectedAnimal.getGenes().toString());
             selectedEnergy.setText(String.valueOf(selectedAnimal.getEnergy()));
@@ -152,16 +154,18 @@ public class SimulationPresenter implements IObserver {
         animalAmount.setText(String.valueOf(simulation.getAnimals().size()));
         plantAmount.setText(String.valueOf(simulation.getPlantCount()));
         mostPopularGenotypes.getChildren().clear();
-        for (String gene : simulation.getMostPopularGenomes())
+        for (String gene : simulation.getMostPopularGenomes().stream().limit(5).toList())
             mostPopularGenotypes.getChildren().add(new Label(gene));
+        if (simulation.getMostPopularGenomes().size() > 5)
+            mostPopularGenotypes.getChildren().add(new Label("..."));
         freeSpaces.setText(String.valueOf(simulation.getFreeFields()));
-        averageChildren.setText(String.valueOf(simulation.getAvgChildren()));
-        averageEnergy.setText(String.valueOf(simulation.getAvgEnergy()));
-        averageLifespan.setText(String.valueOf(simulation.getAvgLifeSpan()));
+        averageChildren.setText(String.format("%.2f", simulation.getAvgChildren()));
+        averageEnergy.setText(String.format("%.2f", simulation.getAvgEnergy()));
+        averageLifespan.setText(String.format("%.2f", simulation.getAvgLifeSpan()));
     }
 
     private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().getFirst());
+        mapGrid.getChildren().retainAll(Collections.singleton(mapGrid.getChildren().get(0)));
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
     }

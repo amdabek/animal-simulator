@@ -1,4 +1,4 @@
-package org.pon1645.ooprojekt.model;
+package org.ponmaj.ooprojekt.model;
 
 public class Grass {
     private final Vector2d position;

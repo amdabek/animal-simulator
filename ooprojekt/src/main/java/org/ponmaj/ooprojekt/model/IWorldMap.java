@@ -1,4 +1,4 @@
-package org.pon1645.ooprojekt.model;
+package org.ponmaj.ooprojekt.model;
 
 public interface IWorldMap {
     boolean canMoveTo(Vector2d position);
