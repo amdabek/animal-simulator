@@ -7,6 +7,12 @@ Jeśli kilka zwierząt stanie na jednym polu, rozmnażają się najsilniejsze, t
 
 Śledzone statystyki: najpopularniejsze genotypy, liczba potomków każdego zwierzęcia, dzień narodin i dzień śmierci każdego zwierzęcia.
 
+# A project made in pairs for Object-Oriented Programming classes.
+
+Animals have genotypes that determine how they move. When they land on the same tile, they reproduce, giving their offspring a fraction of their energy. They replenish their energy by eating grass. There are two configurations for grass growth: either the equatorial belt is favored, or tiles already adjacent to grass. Animals with zero energy die. If multiple animals land on the same tile, only the strongest ones reproduce, and only the strongest ones eat the grass.
+
+Tracked statistics: the most popular genotypes, the number of offspring of each animal, and the birth and death day of each animal.
+
 
 # Uruchamianie:
 Zbudować i uruchomić plik "Main.java" w pakiecie `org.ponmaj.ooprojekt`
